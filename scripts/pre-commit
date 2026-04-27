@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Pre-commit hook: runs clang-format on staged .cpp/.h files.
+# Install by running: scripts/install-hooks.sh (Linux/macOS/Git Bash on Windows)
+
+set -euo pipefail
+
+CLANG_FORMAT=$(command -v clang-format || true)
+if [[ -z "$CLANG_FORMAT" ]]; then
+  echo "warning: clang-format not found, skipping format check"
+  exit 0
+fi
+
+CONFIG="$(git rev-parse --show-toplevel)/config/.clang-format"
+
+# Collect staged .cpp and .h files
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(cpp|h)$' || true)
+
+if [[ -z "$STAGED" ]]; then
+  exit 0
+fi
+
+CHANGED=0
+for FILE in $STAGED; do
+  "$CLANG_FORMAT" --style="file:$CONFIG" -i "$FILE"
+  if ! git diff --quiet "$FILE"; then
+    echo "  formatted: $FILE"
+    git add "$FILE"
+    CHANGED=1
+  fi
+done
+
+if [[ $CHANGED -eq 1 ]]; then
+  echo "clang-format applied fixes — changes re-staged, committing now."
+fi
+
+exit 0

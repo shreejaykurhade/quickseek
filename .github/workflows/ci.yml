@@ -58,32 +58,19 @@ jobs:
       - name: Test
         run: ctest --test-dir build --build-config ${{ matrix.build_type }} --output-on-failure
 
-  # Auto-format: runs clang-format -i and commits any changes back
-  # Only runs on push to main (not on PRs to avoid permission issues)
-  auto-format:
-    name: Auto-format (clang-format)
+  # Format check (clang-format --dry-run)
+  # Formatting is enforced locally via the pre-commit hook (scripts/pre-commit)
+  format-check:
+    name: clang-format
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install clang-format
         run: sudo apt-get install -y clang-format
 
-      - name: Format all sources
+      - name: Check formatting
         run: |
           find src include tools test -name '*.cpp' -o -name '*.h' | \
-          xargs clang-format --style=file:config/.clang-format -i
-
-      - name: Commit formatted files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "style: auto-format with clang-format"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          xargs clang-format --style=file:config/.clang-format --dry-run --Werror
