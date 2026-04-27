@@ -104,7 +104,7 @@ They also verify that indexing stays inside the requested root.
 quickseek/
   CMakeLists.txt          Root CMake build file
   CMakePresets.json       Debug and release configure/build/test presets
-  include/quickseek/      Public headers
+  include/                Public headers
   src/                    Library implementation
   tools/                  Command-line frontend
   test/                   CTest test executables and support helpers

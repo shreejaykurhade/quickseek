@@ -5,7 +5,7 @@ QuickSeek is a small C++17 library plus a command-line frontend.
 ## Architecture
 
 ```text
-include/quickseek/      Public API
+include/                Public API
 src/                    Implementation
 tools/quickseek_cli.cpp Interactive CLI
 test/                   Focused CTest executables
