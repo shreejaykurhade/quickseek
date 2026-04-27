@@ -1,4 +1,4 @@
-#include "quickseek/format.h"
+#include "format.h"
 
 #include <cctype>
 #include <iomanip>

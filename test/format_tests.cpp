@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "quickseek/format.h"
+#include "format.h"
 
 namespace {
 

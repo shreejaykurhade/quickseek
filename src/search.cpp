@@ -1,8 +1,8 @@
-#include "quickseek/search.h"
+#include "search.h"
 
 #include <algorithm>
 
-#include "quickseek/format.h"
+#include "format.h"
 
 namespace quickseek {
 namespace {

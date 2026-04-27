@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "quickseek/search.h"
+#include "search.h"
 #include "test_utils.h"
 
 namespace {

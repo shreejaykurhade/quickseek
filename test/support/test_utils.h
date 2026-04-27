@@ -4,8 +4,8 @@
 #include <fstream>
 #include <string>
 
-#include "quickseek/file_record.h"
-#include "quickseek/format.h"
+#include "file_record.h"
+#include "format.h"
 
 namespace quickseek::test {
 

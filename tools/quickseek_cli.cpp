@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 
-#include "quickseek/format.h"
-#include "quickseek/index.h"
-#include "quickseek/search.h"
+#include "format.h"
+#include "index.h"
+#include "search.h"
 
 namespace fs = std::filesystem;
 

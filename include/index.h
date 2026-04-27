@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "quickseek/file_record.h"
+#include "file_record.h"
 
 namespace quickseek {
 

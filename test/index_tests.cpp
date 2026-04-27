@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "quickseek/index.h"
+#include "index.h"
 #include "test_utils.h"
 
 namespace {

@@ -1,9 +1,9 @@
-#include "quickseek/index.h"
+#include "index.h"
 
 #include <fstream>
 #include <system_error>
 
-#include "quickseek/format.h"
+#include "format.h"
 
 namespace quickseek {
 namespace {
