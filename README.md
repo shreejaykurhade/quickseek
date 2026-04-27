@@ -46,13 +46,13 @@ cmake --build --preset debug
 
 ## Running
 
-Search the current directory:
+Search your Desktop using the default root:
 
 ```powershell
 .\build\release\quickseek.exe
 ```
 
-Search a specific directory:
+Search a specific directory instead:
 
 ```powershell
 .\build\release\quickseek.exe C:\Users\Shreejay\Documents

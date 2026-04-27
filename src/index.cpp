@@ -10,13 +10,15 @@ std::vector<FileRecord> BuildIndex(const std::filesystem::path& root) {
   std::vector<FileRecord> index;
   int next_id = 0;
 
+  std::error_code error;
   std::filesystem::recursive_directory_iterator it(
-      root, std::filesystem::directory_options::skip_permission_denied);
+      root, std::filesystem::directory_options::skip_permission_denied, error);
   std::filesystem::recursive_directory_iterator end;
 
-  for (; it != end; ++it) {
-    std::error_code error;
+  while (it != end) {
+    error.clear();
     if (!it->is_regular_file(error)) {
+      it.increment(error);
       continue;
     }
 
@@ -32,6 +34,8 @@ std::vector<FileRecord> BuildIndex(const std::filesystem::path& root) {
         record.path.filename().string() + " " + record.path.parent_path().string();
     record.tokens = Tokenize(searchable);
     index.push_back(record);
+
+    it.increment(error);
   }
 
   return index;

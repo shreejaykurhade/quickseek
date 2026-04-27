@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -11,6 +12,18 @@
 namespace fs = std::filesystem;
 
 namespace {
+
+fs::path DefaultSearchRoot() {
+  const char* user_profile = std::getenv("USERPROFILE");
+  if (user_profile != nullptr) {
+    fs::path desktop = fs::path(user_profile) / "Desktop";
+    if (fs::exists(desktop) && fs::is_directory(desktop)) {
+      return desktop;
+    }
+  }
+
+  return fs::current_path();
+}
 
 void PrintHelp() {
   std::cout << "\nCommands:\n";
@@ -56,7 +69,7 @@ void PrintResults(const std::vector<quickseek::FileRecord>& index,
 }  // namespace
 
 int main(int argc, char* argv[]) {
-  const fs::path root = argc > 1 ? fs::path(argv[1]) : fs::current_path();
+  const fs::path root = argc > 1 ? fs::path(argv[1]) : DefaultSearchRoot();
 
   if (!fs::exists(root) || !fs::is_directory(root)) {
     std::cerr << "Folder does not exist: " << root.string() << "\n";
