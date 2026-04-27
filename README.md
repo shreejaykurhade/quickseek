@@ -123,6 +123,31 @@ The layout follows the same broad organization used by mature C++ projects such 
 
 QuickSeek is split into a reusable library and a thin command-line tool.
 
+```mermaid
+graph LR
+    subgraph FE ["tools/"]
+        CLI["quickseek_cli.cpp"]
+    end
+    subgraph LIB ["src/ — library"]
+        FMT["format.cpp\nTokenize · ToLower · FormatSize"]
+        IDX["index.cpp\nBuildIndex · LoadIndexOptions"]
+        SCH["search.cpp\nSearchFiles · LargestFiles\nRecentFiles · FilesByExtension"]
+    end
+    subgraph INC ["include/"]
+        FR["file_record.h\nFileRecord"]
+        FH["format.h"]
+        IH["index.h\nIndexOptions"]
+        SH["search.h\nSearchResult"]
+    end
+    CLI --> IDX
+    CLI --> SCH
+    CLI --> FMT
+    IDX --> FMT
+    SCH --> FMT
+    IH --> FR
+    SH --> FR
+```
+
 `BuildIndex()` walks the target directory recursively and creates one `FileRecord` per regular file. Each record stores the file path, name, extension, size, modification time, and searchable tokens.
 
 If the root contains a `.quickseekignore` file, the scanner prunes matching entries while walking. This is faster than indexing everything and filtering later, because ignored directories are not descended into.
