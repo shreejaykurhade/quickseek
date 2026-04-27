@@ -1,76 +1,115 @@
 # QuickSeek
 
-QuickSeek is a small C++ terminal search tool. It scans a folder, builds an in-memory index of file names and paths, then lets you search that index quickly.
+QuickSeek is a small C++17 command-line search tool for local files. It scans a directory, builds an in-memory index of filenames and paths, and returns ranked results from an interactive prompt.
 
-The project layout borrows the useful small-library shape from Google Benchmark:
+The project is intentionally simple, but it is structured like a real C++ library: public headers, private implementation files, a CLI target, CMake presets, and tests.
 
-```text
-quickseek/
-  CMakeLists.txt
-  CMakePresets.json
-  include/quickseek/     public headers
-  src/                   library implementation
-  tools/                 command-line executable
-  test/                  tests run by CTest
-```
+## Features
 
-## Core Idea
+- Recursive directory indexing
+- Filename and folder-path search
+- Ranked results with match reasons
+- Largest-file listing
+- Recently modified file listing
+- Extension filtering, such as `ext .cpp`
+- CTest-based test target
 
-The program has four simple parts:
+## Requirements
 
-1. **Crawler**
-   - Walks through a folder recursively.
-   - Collects file path, name, extension, size, and modified time.
+- C++17 compiler
+- CMake 3.16 or newer
+- Ninja, Make, or another CMake-supported generator
 
-2. **Tokenizer**
-   - Breaks filenames and folder paths into lowercase searchable words.
-   - Example: `Final_Report_2026.pdf` becomes `final`, `report`, `2026`, `pdf`.
+This project is currently developed and tested with GCC via MSYS2 on Windows.
 
-3. **Index**
-   - Stores one `FileRecord` per file.
-   - This first version keeps the index in memory while the app runs.
+## Building
 
-4. **Ranker**
-   - Gives better scores to stronger matches.
-   - Filename prefix match scores higher than folder/path match.
-
-## Necessary First-Version Features
-
-- Recursive folder scan
-- Filename and folder search
-- Ranked top 10 results
-- `large` command for biggest files
-- `recent` command for recently modified files
-- `ext .cpp` style extension filter
-
-## Run
-
-Configure and build with the preset:
+The recommended build path uses CMake presets.
 
 ```powershell
 cmake --preset release
 cmake --build --preset release
 ```
 
-Search the current folder:
+The executable is written to:
+
+```text
+build/release/quickseek.exe
+```
+
+For a debug build:
+
+```powershell
+cmake --preset debug
+cmake --build --preset debug
+```
+
+## Running
+
+Search the current directory:
 
 ```powershell
 .\build\release\quickseek.exe
 ```
 
-Search another folder:
+Search a specific directory:
 
 ```powershell
 .\build\release\quickseek.exe C:\Users\Shreejay\Documents
 ```
 
-Run tests:
+Inside the prompt:
+
+```text
+Search > report
+Search > large
+Search > recent
+Search > ext .pdf
+Search > help
+Search > exit
+```
+
+## Testing
+
+Run the test suite with CTest:
 
 ```powershell
 ctest --preset release
 ```
 
-Manual CMake build without presets:
+The current tests cover tokenization, ranking behavior, and extension filtering.
+
+## Project Layout
+
+```text
+quickseek/
+  CMakeLists.txt          Root CMake build file
+  CMakePresets.json       Debug and release configure/build/test presets
+  include/quickseek/      Public headers
+  src/                    Library implementation
+  tools/                  Command-line frontend
+  test/                   CTest test executable
+```
+
+The layout follows the same broad organization used by mature C++ projects such as [Google Benchmark](https://github.com/google/benchmark): public API in `include/`, implementation in `src/`, tests in `test/`, and CMake as the main build entry point.
+
+## Design
+
+QuickSeek is split into a reusable library and a thin command-line tool.
+
+`BuildIndex()` walks the target directory recursively and creates one `FileRecord` per regular file. Each record stores the file path, name, extension, size, modification time, and searchable tokens.
+
+`Tokenize()` lowercases names and paths, then splits them into alphanumeric words. For example:
+
+```text
+Final_Report_2026.pdf -> final, report, 2026, pdf
+```
+
+`SearchFiles()` scores records against a query. Filename prefix matches are ranked highest, filename substring matches come next, and path-token matches are ranked lower. Results are sorted by score before display.
+
+## Manual CMake Flow
+
+If you do not want to use presets:
 
 ```powershell
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -78,19 +117,14 @@ cmake --build build --config Release
 ctest --test-dir build --build-config Release
 ```
 
-## Example
+## Roadmap
 
-```text
-Search > report
-Search > large
-Search > recent
-Search > ext .pdf
-Search > exit
-```
+- Persist the index to disk for faster startup
+- Search inside text files such as `.txt`, `.cpp`, `.md`, and `.log`
+- Add fuzzy matching for typo-tolerant search
+- Add `open <n>` and `folder <n>` commands for result actions
+- Add benchmarks for indexing and query speed
 
-## Good Next Features
+## License
 
-- Save the index to disk so startup is faster.
-- Search inside text files such as `.txt`, `.cpp`, `.md`, and `.log`.
-- Add fuzzy matching so `resm` can find `resume`.
-- Add an `open 1` command to open a selected file.
+No license has been selected yet.
