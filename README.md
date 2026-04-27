@@ -75,7 +75,7 @@ Inside the prompt:
 
 ```text
 Search > root
-Search > root "%USERPROFILE%\Desktop\cppsomething"
+Search > root "%USERPROFILE%\Desktop"
 Search > report
 Search > large
 Search > recent
