@@ -1,0 +1,10 @@
+function(quickseek_add_test test_name source_file)
+  add_executable(${test_name} ${source_file})
+  target_link_libraries(${test_name} PRIVATE quickseek)
+  target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/support)
+  add_test(NAME ${test_name} COMMAND $<TARGET_FILE:${test_name}>)
+endfunction()
+
+quickseek_add_test(quickseek_format_tests format_tests.cpp)
+quickseek_add_test(quickseek_search_tests search_tests.cpp)
+quickseek_add_test(quickseek_index_tests index_tests.cpp)

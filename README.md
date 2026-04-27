@@ -7,8 +7,10 @@ The project is intentionally simple, but it is structured like a real C++ librar
 ## Features
 
 - Recursive directory indexing
+- Root-level `.quickseekignore` support for skipping generated or unwanted paths
 - Filename and folder-path search
 - Ranked results with match reasons
+- Startup root prompt when no path is provided
 - Interactive root switching with `root <path>`
 - Explicit rescanning with `rescan`
 - Largest-file listing
@@ -48,13 +50,22 @@ cmake --build --preset debug
 
 ## Running
 
-Search your Desktop using the default root:
+Start QuickSeek and choose a root when prompted:
 
 ```powershell
 .\build\release\quickseek.exe
 ```
 
-Search a specific directory instead:
+Example startup:
+
+```text
+QuickSeek
+Choose a folder to scan.
+Press Enter for current folder: C:\Users\Shreejay\Desktop\cppsomething
+Root >
+```
+
+Start directly with a specific root:
 
 ```powershell
 .\build\release\quickseek.exe C:\Users\Shreejay\Documents
@@ -96,7 +107,8 @@ quickseek/
   include/quickseek/      Public headers
   src/                    Library implementation
   tools/                  Command-line frontend
-  test/                   CTest test executable
+  test/                   CTest test executables and support helpers
+  docs/                   Usage, design, and testing notes
 ```
 
 The layout follows the same broad organization used by mature C++ projects such as [Google Benchmark](https://github.com/google/benchmark): public API in `include/`, implementation in `src/`, tests in `test/`, and CMake as the main build entry point.
@@ -105,12 +117,15 @@ The layout follows the same broad organization used by mature C++ projects such 
 
 - [Usage Guide](docs/USAGE.md)
 - [Design Notes](docs/DESIGN.md)
+- [Testing Guide](docs/TESTING.md)
 
 ## Design
 
 QuickSeek is split into a reusable library and a thin command-line tool.
 
 `BuildIndex()` walks the target directory recursively and creates one `FileRecord` per regular file. Each record stores the file path, name, extension, size, modification time, and searchable tokens.
+
+If the root contains a `.quickseekignore` file, the scanner prunes matching entries while walking. This is faster than indexing everything and filtering later, because ignored directories are not descended into.
 
 `Tokenize()` lowercases names and paths, then splits them into alphanumeric words. For example:
 
@@ -121,6 +136,8 @@ Final_Report_2026.pdf -> final, report, 2026, pdf
 `SearchFiles()` scores records against a query. Filename prefix matches are ranked highest, filename substring matches come next, and path-token matches are ranked lower. Results are sorted by score before display.
 
 The command-line tool owns the active root and active index. Searching is fast after the scan because queries run against the in-memory records instead of walking the filesystem every time.
+
+Ignore rules are loaded from `.quickseekignore` in the active root. Empty lines and `#` comments are ignored. A rule like `build/` skips a directory, `skip.txt` skips any file or directory with that name, and `docs/private/` skips that relative directory.
 
 ## Manual CMake Flow
 

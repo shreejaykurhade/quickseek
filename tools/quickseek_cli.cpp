@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <chrono>
-#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -34,18 +33,6 @@ std::string StripMatchingQuotes(std::string text) {
   return text;
 }
 
-fs::path DefaultSearchRoot() {
-  const char* user_profile = std::getenv("USERPROFILE");
-  if (user_profile != nullptr) {
-    fs::path desktop = fs::path(user_profile) / "Desktop";
-    if (fs::exists(desktop) && fs::is_directory(desktop)) {
-      return desktop;
-    }
-  }
-
-  return fs::current_path();
-}
-
 void PrintHelp() {
   std::cout << "\nCommands:\n";
   std::cout << "  any words        search filenames and folders\n";
@@ -57,6 +44,25 @@ void PrintHelp() {
   std::cout << "  rescan           rebuild index for current root\n";
   std::cout << "  help             show this help\n";
   std::cout << "  exit             quit\n\n";
+}
+
+fs::path PromptForInitialRoot() {
+  std::cout << "Choose a folder to scan.\n";
+  std::cout << "Press Enter for current folder: "
+            << fs::current_path().string() << "\n";
+  std::cout << "Root > ";
+
+  std::string input;
+  if (!std::getline(std::cin, input)) {
+    return {};
+  }
+
+  input = StripMatchingQuotes(input);
+  if (input.empty()) {
+    return fs::current_path();
+  }
+
+  return fs::path(input);
 }
 
 void PrintFiles(const std::vector<quickseek::FileRecord>& files) {
@@ -120,9 +126,13 @@ bool RebuildIndex(const fs::path& requested_root, fs::path& current_root,
 int main(int argc, char* argv[]) {
   fs::path current_root;
   std::vector<quickseek::FileRecord> index;
-  const fs::path initial_root = argc > 1 ? fs::path(argv[1]) : DefaultSearchRoot();
 
   std::cout << "QuickSeek\n";
+  const fs::path initial_root =
+      argc > 1 ? fs::path(argv[1]) : PromptForInitialRoot();
+  if (initial_root.empty()) {
+    return 1;
+  }
   if (!RebuildIndex(initial_root, current_root, index)) {
     return 1;
   }

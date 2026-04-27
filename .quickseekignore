@@ -1,0 +1,11 @@
+# Generated build output.
+build/
+
+# Version-control metadata.
+.git/
+
+# Common dependency/editor folders.
+node_modules/
+.vs/
+.idea/
+.vscode/

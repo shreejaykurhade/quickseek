@@ -29,7 +29,5 @@ set_target_properties(quickseek_cli PROPERTIES OUTPUT_NAME quickseek)
 
 if(QUICKSEEK_BUILD_TESTS)
   enable_testing()
-  add_executable(quickseek_tests test/quickseek_tests.cpp)
-  target_link_libraries(quickseek_tests PRIVATE quickseek)
-  add_test(NAME quickseek_tests COMMAND quickseek_tests)
+  add_subdirectory(test)
 endif()
