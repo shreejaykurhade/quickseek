@@ -9,6 +9,8 @@ The project is intentionally simple, but it is structured like a real C++ librar
 - Recursive directory indexing
 - Filename and folder-path search
 - Ranked results with match reasons
+- Interactive root switching with `root <path>`
+- Explicit rescanning with `rescan`
 - Largest-file listing
 - Recently modified file listing
 - Extension filtering, such as `ext .cpp`
@@ -61,13 +63,18 @@ Search a specific directory instead:
 Inside the prompt:
 
 ```text
+Search > root
+Search > root C:\Users\Shreejay\Desktop\cppsomething
 Search > report
 Search > large
 Search > recent
 Search > ext .pdf
+Search > rescan
 Search > help
 Search > exit
 ```
+
+QuickSeek only searches inside the current root. When you run `root <path>`, it discards the previous index, scans the new folder, and all following searches use that new index.
 
 ## Testing
 
@@ -78,6 +85,7 @@ ctest --preset release
 ```
 
 The current tests cover tokenization, ranking behavior, and extension filtering.
+They also verify that indexing stays inside the requested root.
 
 ## Project Layout
 
@@ -93,6 +101,11 @@ quickseek/
 
 The layout follows the same broad organization used by mature C++ projects such as [Google Benchmark](https://github.com/google/benchmark): public API in `include/`, implementation in `src/`, tests in `test/`, and CMake as the main build entry point.
 
+## Documentation
+
+- [Usage Guide](docs/USAGE.md)
+- [Design Notes](docs/DESIGN.md)
+
 ## Design
 
 QuickSeek is split into a reusable library and a thin command-line tool.
@@ -106,6 +119,8 @@ Final_Report_2026.pdf -> final, report, 2026, pdf
 ```
 
 `SearchFiles()` scores records against a query. Filename prefix matches are ranked highest, filename substring matches come next, and path-token matches are ranked lower. Results are sorted by score before display.
+
+The command-line tool owns the active root and active index. Searching is fast after the scan because queries run against the in-memory records instead of walking the filesystem every time.
 
 ## Manual CMake Flow
 
