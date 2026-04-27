@@ -2,6 +2,18 @@
 
 QuickSeek is a small C++ terminal search tool. It scans a folder, builds an in-memory index of file names and paths, then lets you search that index quickly.
 
+The project layout borrows the useful small-library shape from Google Benchmark:
+
+```text
+quickseek/
+  CMakeLists.txt
+  CMakePresets.json
+  include/quickseek/     public headers
+  src/                   library implementation
+  tools/                 command-line executable
+  test/                  tests run by CTest
+```
+
 ## Core Idea
 
 The program has four simple parts:
@@ -33,22 +45,37 @@ The program has four simple parts:
 
 ## Run
 
-Compile:
+Configure and build with the preset:
 
 ```powershell
-g++ -std=c++17 -O2 -Wall -Wextra main.cpp -o quickseek.exe
+cmake --preset release
+cmake --build --preset release
 ```
 
 Search the current folder:
 
 ```powershell
-.\quickseek.exe
+.\build\release\quickseek.exe
 ```
 
 Search another folder:
 
 ```powershell
-.\quickseek.exe C:\Users\Shreejay\Documents
+.\build\release\quickseek.exe C:\Users\Shreejay\Documents
+```
+
+Run tests:
+
+```powershell
+ctest --preset release
+```
+
+Manual CMake build without presets:
+
+```powershell
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+ctest --test-dir build --build-config Release
 ```
 
 ## Example
