@@ -121,7 +121,6 @@ cmake --build build/release --target package
 quickseek/
   CMakeLists.txt              Root CMake build file
   CMakePresets.json           Debug and release presets
-  CHANGELOG.md                Release history
   LICENSE                     MIT license
   include/                    Public headers
   src/                        Library implementation
