@@ -22,14 +22,14 @@ If you press Enter at the prompt, QuickSeek scans the current working directory.
 ```text
 QuickSeek
 Choose a folder to scan.
-Press Enter for current folder: C:\Users\Shreejay\Desktop\cppsomething
+Press Enter for Desktop: C:\Users\<you>\Desktop
 Root >
 ```
 
 Start directly with a specific root:
 
 ```powershell
-.\build\release\quickseek.exe C:\Users\Shreejay\Documents
+.\build\release\quickseek.exe "%USERPROFILE%\Documents"
 ```
 
 ## Root Commands
@@ -43,13 +43,13 @@ Search > root
 Change the root and rebuild the index:
 
 ```text
-Search > root C:\Users\Shreejay\Desktop\cppsomething
+Search > root "%USERPROFILE%\Desktop\cppsomething"
 ```
 
 Paths with spaces can be quoted:
 
 ```text
-Search > root "C:\Users\Shreejay\Desktop\My Project"
+Search > root "%USERPROFILE%\Desktop\My Project"
 ```
 
 Rebuild the index for the current root:
@@ -100,7 +100,7 @@ Search > exit
 The active root is the boundary. If the current root is:
 
 ```text
-C:\Users\Shreejay\Desktop\cppsomething
+C:\Users\<you>\Desktop\cppsomething
 ```
 
 QuickSeek indexes files inside that folder and its subfolders. Sibling folders on the Desktop are not included.

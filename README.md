@@ -61,21 +61,21 @@ Example startup:
 ```text
 QuickSeek
 Choose a folder to scan.
-Press Enter for current folder: C:\Users\Shreejay\Desktop\cppsomething
+Press Enter for Desktop: C:\Users\<you>\Desktop
 Root >
 ```
 
 Start directly with a specific root:
 
 ```powershell
-.\build\release\quickseek.exe C:\Users\Shreejay\Documents
+.\build\release\quickseek.exe "%USERPROFILE%\Documents"
 ```
 
 Inside the prompt:
 
 ```text
 Search > root
-Search > root C:\Users\Shreejay\Desktop\cppsomething
+Search > root "%USERPROFILE%\Desktop\cppsomething"
 Search > report
 Search > large
 Search > recent
@@ -115,9 +115,9 @@ The layout follows the same broad organization used by mature C++ projects such 
 
 ## Documentation
 
-- [Usage Guide](docs/USAGE.md)
-- [Design Notes](docs/DESIGN.md)
-- [Testing Guide](docs/TESTING.md)
+- [Usage Guide](docs/usage-guide.md)
+- [Design Notes](docs/design-notes.md)
+- [Testing Guide](docs/testing-guide.md)
 
 ## Design
 

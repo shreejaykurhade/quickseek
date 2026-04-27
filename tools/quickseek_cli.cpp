@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -46,10 +47,27 @@ void PrintHelp() {
   std::cout << "  exit             quit\n\n";
 }
 
+// Returns the Desktop path for the current OS user.
+// Reads USERPROFILE (Windows) or HOME (macOS/Linux) at runtime so it works
+// for any username without hardcoding.
+fs::path GetDesktopPath() {
+  const char* home = std::getenv("USERPROFILE");  // Windows
+  if (!home) {
+    home = std::getenv("HOME");                    // macOS / Linux
+  }
+  if (home) {
+    fs::path desktop = fs::path(home) / "Desktop";
+    if (fs::exists(desktop) && fs::is_directory(desktop)) {
+      return desktop;
+    }
+  }
+  return fs::current_path();  // Fallback: working directory
+}
+
 fs::path PromptForInitialRoot() {
+  const fs::path default_root = GetDesktopPath();
   std::cout << "Choose a folder to scan.\n";
-  std::cout << "Press Enter for current folder: "
-            << fs::current_path().string() << "\n";
+  std::cout << "Press Enter for Desktop: " << default_root.string() << "\n";
   std::cout << "Root > ";
 
   std::string input;
@@ -59,7 +77,7 @@ fs::path PromptForInitialRoot() {
 
   input = StripMatchingQuotes(input);
   if (input.empty()) {
-    return fs::current_path();
+    return default_root;
   }
 
   return fs::path(input);

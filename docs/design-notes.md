@@ -66,7 +66,7 @@ The selected root defines the search boundary. QuickSeek does not scan sibling f
 For example:
 
 ```text
-root C:\Users\Shreejay\Desktop\cppsomething
+root C:\Users\<you>\Desktop\cppsomething
 ```
 
 Only files under `cppsomething` are indexed.
