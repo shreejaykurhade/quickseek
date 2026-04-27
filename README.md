@@ -187,4 +187,4 @@ ctest --test-dir build --build-config Release
 
 ## License
 
-No license has been selected yet.
+MIT — see [LICENSE](LICENSE).

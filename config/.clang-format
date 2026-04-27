@@ -1,0 +1,40 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+
+# Column limit matches what the existing code uses
+ColumnLimit: 80
+
+# Brace style
+BreakBeforeBraces: Attach
+
+# Include sorting
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Standard library headers (angle-bracket)
+  - Regex: '^<'
+    Priority: 2
+  # Project headers (quoted)
+  - Regex: '^"'
+    Priority: 1
+
+# Pointer alignment
+PointerAlignment: Left
+
+# Allow short functions on one line
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Indent
+IndentWidth: 2
+ContinuationIndentWidth: 4
+AccessModifierOffset: -1
+
+# Trailing commas
+InsertTrailingCommas: None
+
+# Namespace
+CompactNamespaces: false
+NamespaceIndentation: None
