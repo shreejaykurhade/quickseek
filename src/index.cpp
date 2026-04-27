@@ -1,9 +1,9 @@
 #include "index.h"
 
+#include "format.h"
+
 #include <fstream>
 #include <system_error>
-
-#include "format.h"
 
 namespace quickseek {
 namespace {
@@ -128,9 +128,11 @@ std::vector<FileRecord> BuildIndex(const std::filesystem::path& root,
     const IndexOptions file_options = LoadIndexOptions(root);
     effective_options.ignore_patterns.insert(
         effective_options.ignore_patterns.end(),
-        file_options.ignore_patterns.begin(), file_options.ignore_patterns.end());
+        file_options.ignore_patterns.begin(),
+        file_options.ignore_patterns.end());
   }
-  const std::vector<IgnoreRule> ignore_rules = BuildIgnoreRules(effective_options);
+  const std::vector<IgnoreRule> ignore_rules =
+      BuildIgnoreRules(effective_options);
 
   std::error_code error;
   std::filesystem::recursive_directory_iterator it(
@@ -160,8 +162,8 @@ std::vector<FileRecord> BuildIndex(const std::filesystem::path& root,
     record.size = it->file_size(error);
     record.modified = it->last_write_time(error);
 
-    const std::string searchable =
-        record.path.filename().string() + " " + record.path.parent_path().string();
+    const std::string searchable = record.path.filename().string() + " " +
+                                   record.path.parent_path().string();
     record.tokens = Tokenize(searchable);
     index.push_back(record);
 

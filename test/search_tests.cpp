@@ -1,15 +1,16 @@
+#include "search.h"
+#include "test_utils.h"
+
 #include <cassert>
 #include <string>
 #include <vector>
-
-#include "search.h"
-#include "test_utils.h"
 
 namespace {
 
 void SearchRanksPrefixBeforeContains() {
   std::vector<quickseek::FileRecord> index;
-  index.push_back(quickseek::test::MakeRecord(0, "notes/project_report.txt", 10));
+  index.push_back(
+      quickseek::test::MakeRecord(0, "notes/project_report.txt", 10));
   index.push_back(quickseek::test::MakeRecord(1, "notes/report.txt", 10));
 
   const std::vector<quickseek::SearchResult> results =

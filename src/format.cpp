@@ -19,7 +19,8 @@ std::vector<std::string> Tokenize(const std::string& text) {
 
   for (char ch : text) {
     if (std::isalnum(static_cast<unsigned char>(ch))) {
-      current += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+      current +=
+          static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
     } else if (!current.empty()) {
       tokens.push_back(current);
       current.clear();

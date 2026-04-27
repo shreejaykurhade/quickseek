@@ -1,14 +1,15 @@
+#include "index.h"
+#include "test_utils.h"
+
 #include <algorithm>
 #include <cassert>
 #include <string>
 #include <vector>
 
-#include "index.h"
-#include "test_utils.h"
-
 namespace {
 
-std::vector<std::string> FileNames(const std::vector<quickseek::FileRecord>& index) {
+std::vector<std::string> FileNames(
+    const std::vector<quickseek::FileRecord>& index) {
   std::vector<std::string> names;
   for (const quickseek::FileRecord& file : index) {
     names.push_back(file.name);
@@ -16,7 +17,8 @@ std::vector<std::string> FileNames(const std::vector<quickseek::FileRecord>& ind
   return names;
 }
 
-bool ContainsName(const std::vector<std::string>& names, const std::string& name) {
+bool ContainsName(const std::vector<std::string>& names,
+                  const std::string& name) {
   return std::find(names.begin(), names.end(), name) != names.end();
 }
 
@@ -83,7 +85,8 @@ void BuildIndexSupportsRelativeIgnorePath() {
 }
 
 void BuildIndexSupportsProgrammaticIgnorePatterns() {
-  quickseek::test::ScopedTestDirectory base("quickseek_programmatic_ignore_test");
+  quickseek::test::ScopedTestDirectory base(
+      "quickseek_programmatic_ignore_test");
   base.CreateFile("cache/data.bin", "cache");
   base.CreateFile("src/app.cpp", "app");
 

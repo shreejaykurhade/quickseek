@@ -1,8 +1,8 @@
 #include "search.h"
 
-#include <algorithm>
-
 #include "format.h"
+
+#include <algorithm>
 
 namespace quickseek {
 namespace {
@@ -63,10 +63,9 @@ std::vector<SearchResult> SearchFiles(const std::vector<FileRecord>& index,
 
 std::vector<FileRecord> LargestFiles(std::vector<FileRecord> index,
                                      std::size_t limit) {
-  std::sort(index.begin(), index.end(),
-            [](const FileRecord& a, const FileRecord& b) {
-              return a.size > b.size;
-            });
+  std::sort(
+      index.begin(), index.end(),
+      [](const FileRecord& a, const FileRecord& b) { return a.size > b.size; });
   if (index.size() > limit) {
     index.resize(limit);
   }

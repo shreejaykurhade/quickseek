@@ -1,11 +1,11 @@
 #pragma once
 
+#include "file_record.h"
+#include "format.h"
+
 #include <filesystem>
 #include <fstream>
 #include <string>
-
-#include "file_record.h"
-#include "format.h"
 
 namespace quickseek::test {
 

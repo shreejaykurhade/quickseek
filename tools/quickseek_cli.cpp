@@ -1,3 +1,7 @@
+#include "format.h"
+#include "index.h"
+#include "search.h"
+
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
@@ -5,10 +9,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "format.h"
-#include "index.h"
-#include "search.h"
 
 namespace fs = std::filesystem;
 
@@ -26,9 +26,8 @@ std::string Trim(std::string text) {
 
 std::string StripMatchingQuotes(std::string text) {
   text = Trim(text);
-  if (text.size() >= 2 &&
-      ((text.front() == '"' && text.back() == '"') ||
-       (text.front() == '\'' && text.back() == '\''))) {
+  if (text.size() >= 2 && ((text.front() == '"' && text.back() == '"') ||
+                           (text.front() == '\'' && text.back() == '\''))) {
     return text.substr(1, text.size() - 2);
   }
   return text;
@@ -53,7 +52,7 @@ void PrintHelp() {
 fs::path GetDesktopPath() {
   const char* home = std::getenv("USERPROFILE");  // Windows
   if (!home) {
-    home = std::getenv("HOME");                    // macOS / Linux
+    home = std::getenv("HOME");  // macOS / Linux
   }
   if (home) {
     fs::path desktop = fs::path(home) / "Desktop";
@@ -131,7 +130,8 @@ bool RebuildIndex(const fs::path& requested_root, fs::path& current_root,
   const auto end = std::chrono::steady_clock::now();
 
   const auto millis =
-      std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+      std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+          .count();
   current_root = root;
   index = std::move(next_index);
 
@@ -182,7 +182,8 @@ int main(int argc, char* argv[]) {
     }
     if (command.rfind("root ", 0) == 0 || command.rfind("cd ", 0) == 0) {
       const std::size_t command_size = command.rfind("root ", 0) == 0 ? 5 : 3;
-      const std::string path_text = StripMatchingQuotes(input.substr(command_size));
+      const std::string path_text =
+          StripMatchingQuotes(input.substr(command_size));
       if (path_text.empty()) {
         std::cout << "Usage: root <path>\n";
         continue;
