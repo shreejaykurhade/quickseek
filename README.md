@@ -125,25 +125,28 @@ QuickSeek is split into a reusable library and a thin command-line tool.
 
 ```mermaid
 graph LR
-    subgraph FE ["tools/"]
+    subgraph tools ["tools/"]
         CLI["quickseek_cli.cpp"]
     end
-    subgraph LIB ["src/ — library"]
-        FMT["format.cpp\nTokenize · ToLower · FormatSize"]
-        IDX["index.cpp\nBuildIndex · LoadIndexOptions"]
-        SCH["search.cpp\nSearchFiles · LargestFiles\nRecentFiles · FilesByExtension"]
+    subgraph src ["src/"]
+        FMT["format.cpp<br/>Tokenize · ToLower · FormatSize"]
+        IDX["index.cpp<br/>BuildIndex · LoadIndexOptions"]
+        SCH["search.cpp<br/>SearchFiles · LargestFiles<br/>RecentFiles · FilesByExtension"]
     end
-    subgraph INC ["include/"]
-        FR["file_record.h\nFileRecord"]
+    subgraph inc ["include/"]
+        FR["file_record.h<br/>FileRecord"]
         FH["format.h"]
-        IH["index.h\nIndexOptions"]
-        SH["search.h\nSearchResult"]
+        IH["index.h<br/>IndexOptions"]
+        SH["search.h<br/>SearchResult"]
     end
-    CLI --> IDX
-    CLI --> SCH
-    CLI --> FMT
-    IDX --> FMT
-    SCH --> FMT
+    CLI --> FH
+    CLI --> IH
+    CLI --> SH
+    FMT --> FH
+    IDX --> IH
+    IDX --> FH
+    SCH --> SH
+    SCH --> FH
     IH --> FR
     SH --> FR
 ```
