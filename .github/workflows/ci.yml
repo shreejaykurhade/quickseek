@@ -10,7 +10,7 @@ jobs:
   # Linux (GCC via apt)
   build-linux:
     name: Linux (GCC, ${{ matrix.build_type }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -38,7 +38,7 @@ jobs:
   # Windows (MSVC via Visual Studio)
   build-windows:
     name: Windows (MSVC, ${{ matrix.build_type }})
-    runs-on: windows-latest
+    runs-on: windows-2025
     strategy:
       fail-fast: false
       matrix:
@@ -62,15 +62,16 @@ jobs:
   # Formatting is enforced locally via the pre-commit hook (scripts/pre-commit)
   format-check:
     name: clang-format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install clang-format
-        run: sudo apt-get install -y clang-format
+        run: sudo apt-get install -y clang-format-18
 
       - name: Check formatting
         run: |
           find src include tools test -name '*.cpp' -o -name '*.h' | \
-          xargs clang-format --style=file:config/.clang-format --dry-run --Werror
+          xargs clang-format-18 --style=file:config/.clang-format --dry-run --Werror
+
